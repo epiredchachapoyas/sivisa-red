@@ -50,6 +50,9 @@ Aparecen primero en la barra de los portales y se ocultan solas al pasar la fech
 
 ## Guías animados
 
+
+
+
 - Portal Epidemiológico: búho (`epidemiologia/assets/buho.js`), con un gesto y mensaje por pestaña.
 - Portal de Salud Ambiental: mundo, gota, Aedes hembra y Lutzomyia (`salud-ambiental/assets/guia.js`).
 Los mensajes de cada pestaña se cambian en la lista del inicio de cada archivo. El visitante puede ocultarlos con la ×.
