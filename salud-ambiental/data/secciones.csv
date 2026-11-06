@@ -1,0 +1,5 @@
+orden,id,titulo,tipo,icono,descripcion,enlace,padre,modulos
+1,inicio,Inicio,inicio,inicio,Resumen del portal y últimas publicaciones.,,,
+2,nosotros,Nosotros,pagina,equipo,"Misión, visión, funciones y equipo técnico de Salud Ambiental.",,,
+3,agua,Calidad del agua,agua,gota,"Riesgo mensual de los sistemas de abastecimiento de agua para consumo humano, por localidad, con mapa y comparación entre meses.",,,
+4,control-vectorial,Control vectorial,vectores,vector,"Vigilancia entomológica de Aedes aegypti (escenarios e índices aédicos) y de Lutzomyia (índice de riesgo) en la Red.",,,
