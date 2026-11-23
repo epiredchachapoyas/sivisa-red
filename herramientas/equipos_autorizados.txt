@@ -1,3 +1,4 @@
 # Equipos autorizados para la publicación automática de SIVISA (código + firma del autor).
 # Cada firma solo vale para su equipo: copiarla a otra computadora no sirve.
 6C91-8230-FC99-F9F7 YEAtPE5bwLCaNWk0q6OoissIcI/Wezf4Lhh3wWLVUaJ3V5EKQDvXln3QXd/IMmUPAPuT2uh0QgG2ZiHMgpPYBQ==   # laptop del autor (Lenovo)
+2F0E-A3AD-F923-D1F6 m/eS6AgzS3i4anrPUxEfOIgdu1A7430MkpApsFFcZOeb2IBjbfE8oxWo6Yf+SfE8NdWebRUV+xee72jdzMB2Cg==   # PC central de la Red (C:\PORTAL)
