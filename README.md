@@ -65,3 +65,8 @@ Aparecen primero en la barra de los portales y se ocultan solas al pasar la fech
 - Portal de Salud Ambiental: mundo, gota, Aedes hembra y Lutzomyia (`salud-ambiental/assets/guia.js`).
 - Portal PROMSA: Casita saludable (`promsa/assets/guia.js`).
 Los mensajes de cada pestaña se cambian en la lista del inicio de cada archivo. El visitante puede ocultarlos con la ×.
+
+
+## Autoría y licencia
+
+Diseño y desarrollo: M.C. Yhojar A. Pisfil-Farroñay. © 2026. Todos los derechos reservados. La Red Integrada de Salud Chachapoyas tiene una licencia de uso gratuita y no exclusiva. Ver `LICENSE.txt`.

@@ -1,0 +1,29 @@
+SIVISA – Sistema de Vigilancia e Información en Salud
+Red Integrada de Salud Chachapoyas (Amazonas, Perú)
+
+Copyright © 2026 M.C. Yhojar A. Pisfil-Farroñay. Todos los derechos reservados.
+
+1. Autoría
+El diseño, la estructura, la interfaz, los guías animados y el código fuente de SIVISA
+(archivos HTML, CSS, JavaScript, Python y R de este repositorio) son obra de
+M.C. Yhojar A. Pisfil-Farroñay, protegida por el Decreto Legislativo N.° 822,
+Ley sobre el Derecho de Autor.
+
+2. Uso autorizado
+Se concede a la Red Integrada de Salud Chachapoyas una licencia de uso gratuita,
+no exclusiva y revocable, únicamente para publicar y mantener actualizado este portal
+con su propia información institucional (boletines, salas, alertas, datos y documentos).
+
+3. Restricciones
+Sin autorización previa y por escrito del autor no se permite:
+ - copiar, modificar, adaptar o reutilizar el código o el diseño en otros sitios o sistemas;
+ - ceder, sublicenciar, vender o distribuir el sistema a terceros;
+ - retirar o alterar los créditos de autoría.
+El que este repositorio sea público no concede ningún permiso adicional.
+
+4. Contenidos institucionales
+Los documentos, cifras e información sanitaria publicados (boletines, salas situacionales,
+normas, datos de vigilancia) pertenecen a sus respectivas instituciones y se rigen por sus
+propias condiciones.
+
+Contacto del autor: yhojar.minsa@gmail.com
