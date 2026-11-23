@@ -12,8 +12,10 @@ import glob, hashlib, json, os, shutil, subprocess, sys, traceback
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASES = os.path.join(os.path.dirname(RAIZ), "BASES_NOTISP")
-ESTADO = os.path.join(BASES, ".estado_sivisa.json")
-REGISTRO = os.path.join(BASES, "ULTIMA_ACTUALIZACION.txt")
+SOLO_PUBLICAR = os.path.join(os.path.dirname(RAIZ), "SIVISA_SOLO_PUBLICAR.txt")   # este equipo no procesa bases
+_DIR = BASES if os.path.isdir(BASES) else os.path.dirname(RAIZ)   # sin bases (p. ej. laptop): junto al portal
+ESTADO = os.path.join(_DIR, ".estado_sivisa.json")
+REGISTRO = os.path.join(_DIR, "ULTIMA_ACTUALIZACION.txt")
 NOSHOW = 0x08000000 if os.name == "nt" else 0          # sin ventanas negras en Windows
 lineas = []
 
@@ -71,13 +73,26 @@ def leer_estado():
 def main():
     forzar = "--forzar" in sys.argv
     est = leer_estado()
+    # 0) Candado: solo equipos autorizados por el autor (ver herramientas/licencia.py)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    try:
+        import licencia
+        ok, msg = licencia.autorizado()
+    except Exception as e:
+        ok, msg = False, "No se pudo verificar la autorización del equipo (%s)." % e
+    if not ok or msg != est.get("licencia") or forzar:
+        log(msg)
+        est["licencia"] = msg
+    if not ok:
+        guardar(est)
+        return
     # 1) Cambios de otras computadoras
     try:
         git("pull", "--rebase", "--autostash", "--quiet")
     except Exception as e:
         log("Aviso: no se pudo traer cambios de GitHub (%s). Se reintenta en la próxima vuelta." % str(e)[:200])
     # 2) Bases semanales
-    hu = huella()
+    hu = None if os.path.isfile(SOLO_PUBLICAR) else huella()
     if hu and (forzar or hu != est.get("huella")):
         try:
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -103,6 +118,10 @@ def main():
             log("Sin cambios.")
     except Exception as e:
         log("ERROR al publicar: %s" % str(e)[:300])
+    guardar(est)
+
+
+def guardar(est):
     est["ultima"] = dt.datetime.now().isoformat(timespec="seconds")
     try:
         json.dump(est, open(ESTADO, "w", encoding="utf-8"))

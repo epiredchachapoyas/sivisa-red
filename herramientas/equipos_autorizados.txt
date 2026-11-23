@@ -1,0 +1,2 @@
+# Equipos autorizados para la publicación automática de SIVISA (código + firma del autor).
+# Cada firma solo vale para su equipo: copiarla a otra computadora no sirve.

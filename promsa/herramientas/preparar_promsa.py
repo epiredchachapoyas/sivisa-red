@@ -68,6 +68,45 @@ def aviso(m): print("  ! " + m)
 def nombre_mr(s): return txt(s).upper().replace("MCR ", "").replace("MICRORED ", "").strip()
 
 
+def indices(c):
+    """Columnas del HIS -> índices: ("T","AQ") o ["FX","GA"] (forma interna) o texto "T:AQ, FX, GA" (hoja Programas)."""
+    if isinstance(c, tuple):
+        return list(range(ci(c[0]) - 1, ci(c[1])))
+    if isinstance(c, list):
+        return [ci(x) - 1 for x in c]
+    out, txtc = [], str(c).upper()
+    resto = re.sub(r"[A-Z]{1,3}\s*[:\-–]\s*[A-Z]{1,3}|[A-Z]{1,3}|[\s,;]+", "", txtc)
+    if resto:
+        raise ValueError("columnas no válidas: " + txtc)
+    for t in re.findall(r"[A-Z]{1,3}\s*[:\-–]\s*[A-Z]{1,3}|[A-Z]{1,3}", txtc):
+        m = re.fullmatch(r"([A-Z]{1,3})\s*[:\-–]\s*([A-Z]{1,3})", t)
+        out += list(range(ci(m.group(1)) - 1, ci(m.group(2)))) if m else [ci(t) - 1]
+    return out
+
+
+def leer_programas(wb):
+    """Hoja Programas de la plantilla (si existe): reemplaza la lista PROGRAMAS por defecto."""
+    global PROGRAMAS
+    if "Programas" not in wb.sheetnames:
+        return
+    nuevos = []
+    for n, r in enumerate(wb["Programas"].iter_rows(min_row=4, values_only=True), 4):
+        if not r or not txt(r[0]) or not txt(r[3]):
+            continue
+        pid = txt(r[0]).split(".")[0]
+        try:
+            indices(txt(r[3]))
+        except Exception as e:
+            aviso("Programas fila %d (PP %s): %s; se usa la configuración anterior." % (n, pid, e)); return
+        previo = next((p for p in PROGRAMAS if p["id"] == pid), {})
+        nuevos.append({"id": pid, "nombre": txt(r[1]) or previo.get("nombre", pid), "corto": txt(r[2]) or txt(r[1]) or pid,
+                       "cols": txt(r[3]), "comparable": C.clave(txt(r[5])) in ("si", "s", "yes", "1", "true"),
+                       "unidad": txt(r[4]) or previo.get("unidad", "registros"),
+                       "color": txt(r[6]) if len(r) > 6 and re.fullmatch(r"#[0-9a-fA-F]{6}", txt(r[6])) else previo.get("color", "#8a6a12")})
+    if nuevos:
+        PROGRAMAS = nuevos
+
+
 # ---------------- Reporte HIS ----------------
 def leer_his():
     if not os.path.isdir(HIS): return None
@@ -93,8 +132,7 @@ def leer_his():
         if not mr or mr.startswith("TOTAL"): continue
         d = {}
         for p in PROGRAMAS:
-            c = p["cols"]
-            idx = list(range(ci(c[0]) - 1, ci(c[1]))) if isinstance(c, tuple) else [ci(x) - 1 for x in c]
+            idx = indices(p["cols"])
             d[p["id"]] = int(sum(r[i] for i in idx if i < len(r) and isinstance(r[i], (int, float))))
         if mr == SIN_MR: otros = d
         else: prod[mr] = d
@@ -105,6 +143,7 @@ def leer_his():
 # ---------------- Plantilla ----------------
 def leer_plantilla():
     wb = load_workbook(PLANTILLA, data_only=True)
+    leer_programas(wb)
     out = {}
     ws = wb["Instrucciones"]
     out["mes"] = ""
