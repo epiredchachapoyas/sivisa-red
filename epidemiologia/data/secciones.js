@@ -23,6 +23,17 @@ window.SECCIONES =
     "modulos": ""
   },
   {
+    "orden": 2.5,
+    "id": "actividades",
+    "titulo": "Actividades",
+    "tipo": "actividades",
+    "icono": "estrella",
+    "descripcion": "Capacitaciones, investigaciones de brote, búsquedas activas, supervisiones y demás actividades de la Oficina de Epidemiología en las microredes.",
+    "enlace": "",
+    "padre": "",
+    "modulos": ""
+  },
+  {
     "orden": 3,
     "id": "unidades",
     "titulo": "Sistemas de vigilancia",
@@ -363,5 +374,4 @@ window.SECCIONES =
     "padre": "",
     "modulos": ""
   }
-]
-;
+];

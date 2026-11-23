@@ -74,7 +74,7 @@ window.PAGINAS.nosotros = [
    },
    {
     "nombre": "Irene Katiuska Rodríguez Gutiérrez",
-    "cargo": "Equipo técnico · Médico",
+    "cargo": "Equipo técnico · Obstetra",
     "destacado": false
    },
    {

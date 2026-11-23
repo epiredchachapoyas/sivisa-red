@@ -12,3 +12,7 @@ Individual/
 Edas/
 Iras/
 Febril/
+
+# Excepciones: plantillas sin datos personales que sí se publican
+!datos/ACTIVIDADES_EPIDEMIOLOGIA.xlsx
+!data/unidades/*.xlsx

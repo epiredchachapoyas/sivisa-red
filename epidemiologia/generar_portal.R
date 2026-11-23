@@ -22,7 +22,7 @@ if (!"modulos" %in% names(sec)) sec$modulos <- ""
 req <- c("orden", "id", "titulo", "tipo", "icono", "descripcion", "enlace", "padre", "modulos")
 if (length(setdiff(req, names(sec)))) stop("Faltan columnas en secciones.csv: ", paste(setdiff(req, names(sec)), collapse = ", "))
 sec <- sec[order(as.numeric(sec$orden)), req]
-tipos <- c("inicio", "documentos", "dashboard", "enlace", "pagina", "calendario", "mapa", "semanas", "territorio", "brotes", "algoritmos", "mapaepi")
+tipos <- c("inicio", "documentos", "dashboard", "enlace", "pagina", "calendario", "mapa", "semanas", "territorio", "brotes", "algoritmos", "mapaepi", "actividades")
 if (any(!sec$tipo %in% tipos)) stop("secciones.csv: tipo no válido en ", paste(sec$id[!sec$tipo %in% tipos], collapse = ", "), ". Use: ", paste(tipos, collapse = ", "))
 if (anyDuplicated(sec$id)) stop("secciones.csv: hay ids repetidos")
 if (any(!grepl("^[a-z0-9-]+$", sec$id))) stop("secciones.csv: el id solo puede tener minúsculas, números y guiones (sin tildes ni espacios)")

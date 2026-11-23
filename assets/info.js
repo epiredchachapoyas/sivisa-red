@@ -19,6 +19,14 @@
   function montar(cont, sobre, resp) {
     var S = window.SITIO || {}, sede = S.sede || {}; sobre = sobre || S.sobre || {};
     cont.innerHTML = "";
+    // Misión y visión de la Red: solo en la portada general (se llama sin argumentos), desde SIVISA_INSTITUCIONAL.xlsx
+    if (arguments.length < 2 && (S.mision || S.vision)) {
+      var mv = el("section", "info-c info-mv");
+      [["Misión", S.mision], ["Visión", S.vision]].forEach(function (x) {
+        if (!x[1]) return; var d = el("div"); d.appendChild(cabeza("info", "#e8f0fa", "#0b4e96", x[0])); d.appendChild(el("p", null, x[1])); mv.appendChild(d);
+      });
+      cont.appendChild(mv);
+    }
     if (sobre.texto) {
       var a = el("section", "info-c"); a.appendChild(cabeza("info", "#e8f0fa", "#0b4e96", sobre.titulo || "Sobre el portal"));
       a.appendChild(el("p", null, sobre.texto));

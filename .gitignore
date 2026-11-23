@@ -32,3 +32,8 @@ epidemiologia/data/unidades/*.geojson
 # Excepción: PROMSA (plantilla mensual y reporte HIS de promoción, ambos agregados por microred) sí se suben
 !promsa/datos/*.xlsx
 !promsa/datos/his/*.xlsx
+
+# Excepción: plantillas institucionales y de actividades (textos públicos, sin datos personales) sí se suben
+!data/SIVISA_INSTITUCIONAL.xlsx
+!epidemiologia/datos/ACTIVIDADES_EPIDEMIOLOGIA.xlsx
+!salud-ambiental/datos/ACTIVIDADES_SALUD_AMBIENTAL.xlsx

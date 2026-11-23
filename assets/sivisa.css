@@ -196,6 +196,7 @@ img{max-width:100%}
 
 /* Franja informativa */
 .info{max-width:1240px;margin:0 auto;padding:0 24px 46px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
+.info-mv{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
 .info-c{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px}
 .info-h{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .info-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}

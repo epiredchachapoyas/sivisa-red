@@ -1,6 +1,7 @@
 orden,id,titulo,tipo,icono,descripcion,enlace,padre,modulos
 1,inicio,Inicio,inicio,inicio,Resumen del portal y últimas publicaciones.,,,
 2,nosotros,Nosotros,pagina,equipo,"Misión, visión, funciones y equipo técnico de la Oficina de Epidemiología.",,,
+2.5,actividades,Actividades,actividades,estrella,"Capacitaciones, investigaciones de brote, búsquedas activas, supervisiones y demás actividades de la Oficina de Epidemiología en las microredes.",,,
 3,unidades,Sistemas de vigilancia,dashboard,lupa,"Tableros de la Red Integrada de Salud Chachapoyas por sistema de vigilancia: tendencia semanal, microredes, establecimientos y características de los casos.",,,"eda,ira,feb,leish,dengue,leptospirosis,varicela,lesiones,diabetes,violencia,mnp"
 4,metaxenicas,Metaxénicas,dashboard,lupa,"Dengue, malaria, leishmaniasis, enfermedad de Carrión y otras.",,unidades,"leish,dengue"
 5,febriles,Síndrome febril,dashboard,lupa,Vigilancia del síndrome febril notificado semanalmente por los establecimientos de la Red.,,unidades,feb

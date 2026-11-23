@@ -3,25 +3,33 @@
 #  Lee las bases NotiSP de la Red y escribe data/vigilancia_red.js
 #  Solo publica CONTEOS agregados: ningún nombre, DNI ni dirección.
 #
-#  Uso semanal:
-#   1. Descargue de NotiSP las bases del año y cópielas en RUTA_BASES
-#      (los nombres deben contener: edas, iras, febril, individual,
-#       lesiones...transito .xlsx, diabetes .xlsx).
-#   2. Los maestros (establecimientos, microredes, distritos, provincias,
-#      departamentos, enfermedades) van en RUTA_MAESTROS; se actualizan rara vez.
-#   3. Abra este archivo en RStudio y pulse "Source".
+#  Las bases NUNCA van dentro de sivisa-red. Van en una carpeta hermana:
+#     Documentos\BASES_NOTISP\2026\      bases del año (edas, iras, febril, individual,
+#                                        lesiones…transito .xlsx, diabetes .xlsx; opcionales:
+#                                        mnp, vfamiliar, brotes, Depresion, Psicotico, suicidio)
+#     Documentos\BASES_NOTISP\Maestros\  establecimientos, microredes, distritos, provincias,
+#                                        departamentos, enfermedades, localidades (.csv)
+#  Se usa automáticamente la carpeta del año más reciente (2026, 2027…).
+#
+#  Uso semanal: reemplace las bases en BASES_NOTISP\<año>, abra este archivo en RStudio
+#  y pulse "Source". Luego suba SOLO data/vigilancia_red.js (Commit + Push).
 #  Paquetes: readxl, jsonlite  (install.packages(c("readxl","jsonlite")))
 # =====================================================================
-
-RUTA_BASES    <- "D:/Epidemiologia/NotiSP/Red/2026"          # <- cambie a su carpeta
-RUTA_MAESTROS <- "D:/Epidemiologia/NotiSP/Maestros"           # <- cambie a su carpeta
-SALIDA        <- "data/vigilancia_red.js"                     # relativo a la carpeta epidemiologia
-SUBREG <- "36"; RED <- "01"
-AMBITO <- "Red Integrada de Salud Chachapoyas"
-
 suppressPackageStartupMessages({ library(readxl); library(jsonlite) })
 if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable())
   setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+# Carpeta BASES_NOTISP: al lado de la carpeta sivisa-red (dos niveles arriba de /epidemiologia)
+BASES <- normalizePath(file.path("..", "..", "BASES_NOTISP"), winslash = "/", mustWork = FALSE)
+if (!dir.exists(BASES)) stop("No existe la carpeta ", BASES, ". Créela al lado de sivisa-red (ver manual).")
+anios <- list.dirs(BASES, recursive = FALSE, full.names = FALSE); anios <- anios[grepl("^[0-9]{4}$", anios)]
+if (!length(anios)) stop("Dentro de ", BASES, " falta la carpeta del año (por ejemplo 2026).")
+RUTA_BASES    <- file.path(BASES, max(anios))
+RUTA_MAESTROS <- file.path(BASES, "Maestros")
+SALIDA        <- "data/vigilancia_red.js"                     # relativo a la carpeta epidemiologia
+message("Bases: ", RUTA_BASES, " | Maestros: ", RUTA_MAESTROS)
+SUBREG <- "36"; RED <- "01"
+AMBITO <- "Red Integrada de Salud Chachapoyas"
+
 
 busca <- function(carpeta, patron) {
   f <- sort(list.files(carpeta, pattern = patron, full.names = TRUE, ignore.case = TRUE))

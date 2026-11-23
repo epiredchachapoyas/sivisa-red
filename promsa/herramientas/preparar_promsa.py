@@ -4,12 +4,16 @@
   promsa/datos/his/*.xlsx           reporte HIS de promoción de la salud, tal como se descarga
                                     (si hay varios, se usa el más reciente por fecha de corte)
 
-Salida: promsa/data/promsa.js y promsa/data/nosotros.js
+Salida: promsa/data/promsa.js, promsa/data/actividades.js, promsa/data/emergencias.js y promsa/data/nosotros.js
+Antes ejecuta las herramientas generales de SIVISA (herramientas/fotos.py, institucional.py y actividades.py),
+así el flujo de publicación no necesita cambios.
 Uso:    python3 promsa/herramientas/preparar_promsa.py
 Solo se publican cifras agregadas por microred. Nunca nombres ni DNI de beneficiarios.
 """
 import datetime, json, os, re, sys
 from openpyxl import load_workbook
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "herramientas"))
+import sivisa_comun as C
 from openpyxl.utils import column_index_from_string as ci
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -135,19 +139,10 @@ def leer_plantilla():
             v = num(r[j]) if j < len(r) else None
             if v is not None: metas[mr][pid] = v
     out["metas"] = metas
-    # Actividades
-    ws = wb["Actividades"]; acts = []
-    for r in ws.iter_rows(min_row=4, values_only=True):
-        if not any(r[:8]): continue
-        f, desc = fecha(r[0]), txt(r[7])
-        if not f: aviso("Actividades: fila sin fecha válida (%s); se omite." % desc[:40]); continue
-        if PROHIBIDO.search(desc): aviso("Actividades: la descripción del %s parece tener un DNI; se omite." % f); continue
-        foto = txt(r[8])
-        if foto and not os.path.isfile(os.path.join(FOTOS, foto)): aviso("Foto no encontrada en promsa/fotos: " + foto); foto = ""
-        acts.append({"fecha": f, "microred": nombre_mr(r[1]), "distrito": txt(r[2]), "escenario": txt(r[3]), "tipo": txt(r[4]),
-                     "tema": txt(r[5]), "participantes": int(num(r[6]) or 0), "descripcion": desc[:250], "foto": foto})
-    acts.sort(key=lambda a: a["fecha"], reverse=True)
-    out["actividades"] = acts
+    # Actividades (lectura común a los tres portales: textos libres normalizados, fotos tolerantes a la extensión)
+    out["actividades"] = C.leer_actividades(wb["Actividades"], FOTOS)
+    # Emergencias sanitarias (opcional)
+    out["emergencias"] = leer_emergencias(wb, out["actividades"])
     # Escenarios
     ws = wb["Escenarios"]
     out["escenarios_corte"] = fecha(ws["B2"].value)
@@ -167,6 +162,72 @@ def leer_plantilla():
                     "meses": [txt(x) for x in r[4:16]]})
     out["cronograma"] = cro
     return out
+
+
+def leer_emergencias(wb, acts):
+    """Hojas Emergencias, Emergencias_metas y Emergencias_avance. Devuelve la lista de emergencias con sus
+    indicadores, el avance acumulado frente a la meta, el avance por mes y por microred."""
+    if "Emergencias" not in wb.sheetnames:
+        return []
+    ems, por_clave = [], {}
+    for r in wb["Emergencias"].iter_rows(min_row=4, values_only=True):
+        nom = C.normal(r[0]) if r and r[0] else ""
+        if not nom:
+            continue
+        e = {"nombre": nom, "estado": C.normal(r[1]) or "Activa", "inicio": C.fecha(r[2]), "fin": C.fecha(r[3]),
+             "ambito": C.txt(r[4]), "objetivo": C.txt(r[5]), "contexto": C.txt(r[6]) if len(r) > 6 else "",
+             "indicadores": [], "meses": [], "microredes": [], "actividades": 0}
+        ems.append(e); por_clave[C.clave(nom)] = e
+    if not ems:
+        return []
+    ind_de = {}
+    if "Emergencias_metas" in wb.sheetnames:
+        for r in wb["Emergencias_metas"].iter_rows(min_row=4, values_only=True):
+            if not r or not r[0] or not r[2]:
+                continue
+            e = por_clave.get(C.clave(C.txt(r[0])))
+            if not e:
+                C.aviso("Emergencias_metas: la emergencia '%s' no está en la hoja Emergencias." % C.txt(r[0])); continue
+            i = {"componente": C.txt(r[1]), "indicador": C.normal(r[2]), "unidad": C.txt(r[3]), "meta": C.num(r[4]), "avance": 0}
+            e["indicadores"].append(i); ind_de[(C.clave(e["nombre"]), C.clave(i["indicador"]))] = i
+    meses, mrs = {}, {}
+    if "Emergencias_avance" in wb.sheetnames:
+        for n, r in enumerate(wb["Emergencias_avance"].iter_rows(min_row=4, values_only=True), 4):
+            if not r or not any(x not in (None, "") for x in r[:4]):
+                continue
+            m, e = C.mes(r[0]), por_clave.get(C.clave(C.txt(r[1])))
+            v = C.num(r[3])
+            if not m or not e or v is None:
+                C.aviso("Emergencias_avance fila %d: falta mes, emergencia o avance válido; se omite." % n); continue
+            k = (C.clave(e["nombre"]), C.clave(C.txt(r[2])))
+            i = ind_de.get(k)
+            if not i:
+                i = {"componente": "", "indicador": C.normal(r[2]), "unidad": "", "meta": None, "avance": 0}
+                e["indicadores"].append(i); ind_de[k] = i
+                C.aviso("Emergencias_avance fila %d: indicador sin meta registrada: %s" % (n, i["indicador"]))
+            i["avance"] += v
+            meses.setdefault(id(e), {}).setdefault(m, {}).setdefault(i["indicador"], 0)
+            meses[id(e)][m][i["indicador"]] += v
+            mr = C.nombre_mr(r[4]) if len(r) > 4 else ""
+            if mr:
+                mrs.setdefault(id(e), {}).setdefault(mr, {}).setdefault(i["indicador"], 0)
+                mrs[id(e)][mr][i["indicador"]] += v
+    for e in ems:
+        e["meses"] = [{"mes": m, "valores": v} for m, v in sorted(meses.get(id(e), {}).items())]
+        e["microredes"] = [{"microred": m, "valores": v} for m, v in sorted(mrs.get(id(e), {}).items())]
+        e["actividades"] = sum(1 for a in acts if C.clave(a.get("emergencia", "")) == C.clave(e["nombre"]))
+    ems.sort(key=lambda e: e["inicio"] or "", reverse=True)
+    ems.sort(key=lambda e: C.clave(e["estado"]) != "activa")
+    return ems
+
+
+def extras():
+    """Herramientas generales de SIVISA que se ejecutan al publicar (sin tocar el flujo de GitHub)."""
+    for mod in ("fotos", "institucional", "actividades"):
+        try:
+            __import__(mod).main()
+        except Exception as e:
+            print("  ! herramientas/%s.py: %s" % (mod, e))
 
 
 def nosotros_js(n):
@@ -190,6 +251,7 @@ def nosotros_js(n):
 
 
 def main():
+    extras()
     if not os.path.isfile(PLANTILLA): print("No existe " + PLANTILLA); sys.exit(0)
     print("PROMSA:")
     P = leer_plantilla()
@@ -218,6 +280,13 @@ def main():
         f.write("/* Generado por promsa/herramientas/preparar_promsa.py. No editar a mano. */\nwindow.PROMSA = " + json.dumps(datos, ensure_ascii=False, separators=(",", ":")) + ";\n")
     with open(os.path.join(SALIDA, "nosotros.js"), "w", encoding="utf-8") as f:
         f.write(nosotros_js(P["nosotros"]))
+    C.escribir_js(os.path.join(SALIDA, "actividades.js"), "ACTIVIDADES",
+                  {"actualizado": datos["actualizado"], "fotos": "fotos/", "actividades": P["actividades"]},
+                  "Generado por promsa/herramientas/preparar_promsa.py desde la hoja Actividades de PROMSA_portal.xlsx.")
+    C.escribir_js(os.path.join(SALIDA, "emergencias.js"), "EMERGENCIAS",
+                  {"actualizado": datos["actualizado"], "emergencias": P["emergencias"]},
+                  "Generado por promsa/herramientas/preparar_promsa.py desde las hojas Emergencias de PROMSA_portal.xlsx.")
+    print("  %d emergencias sanitarias" % len(P["emergencias"]))
     print("  %d actividades, %d acciones del cronograma, mes: %s" % (len(P["actividades"]), len(P["cronograma"]), P["mes"] or "–"))
 
 

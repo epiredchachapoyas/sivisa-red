@@ -23,6 +23,17 @@ window.SECCIONES =
     "modulos": ""
   },
   {
+    "orden": 2.5,
+    "id": "actividades",
+    "titulo": "Actividades",
+    "tipo": "actividades",
+    "icono": "estrella",
+    "descripcion": "Vigilancia de agua, inspecciones, control vectorial, campañas y demás actividades de Salud Ambiental en las microredes.",
+    "enlace": "",
+    "padre": "",
+    "modulos": ""
+  },
+  {
     "orden": 3,
     "id": "agua",
     "titulo": "Calidad del agua",
@@ -44,5 +55,4 @@ window.SECCIONES =
     "padre": "",
     "modulos": ""
   }
-]
-;
+];
