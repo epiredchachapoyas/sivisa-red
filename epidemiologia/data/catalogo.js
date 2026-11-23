@@ -1,26 +1,6 @@
 window.CATALOGO = 
 [
   {
-    "id": 4,
-    "titulo": "Sala situacional de leishmaniasis - Amazonas",
-    "seccion": "metaxenicas",
-    "vigilancia": "Leishmaniasis",
-    "se": 35,
-    "descripcion": "Tendencia, canal endémico, distribución territorial, oportunidad y control vectorial",
-    "fecha": "2026-10-21",
-    "archivo": "vigilancias/sala_leishmaniasis_amazonas_2026_se35.pdf"
-  },
-  {
-    "id": 5,
-    "titulo": "Boletín epidemiológico de leishmaniasis - Amazonas",
-    "seccion": "metaxenicas",
-    "vigilancia": "Leishmaniasis",
-    "se": 35,
-    "descripcion": "Situación epidemiológica a la SE 35-2026: magnitud, territorio, características y respuesta",
-    "fecha": "2026-10-21",
-    "archivo": "vigilancias/boletin_leishmaniasis_amazonas_2026_se35.pdf"
-  },
-  {
     "id": 6,
     "titulo": "Calendario epidemiológico 2026",
     "seccion": "calendario",

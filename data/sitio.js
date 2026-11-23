@@ -71,7 +71,18 @@ window.SITIO = {
       logo: "promsa.png",
       enlace: "promsa/index.html",
       color: "#a17f1a",
-      estado: "en construcción"
+      estado: "activo",
+      sobre: {
+        titulo: "Promoción de la salud",
+        texto: "El portal de Promoción de la Salud difunde el trabajo de la Unidad de Promoción de la Salud de la Red Integrada de Salud Chachapoyas: avance de las metas de los programas presupuestales, actividades en la comunidad, escenarios saludables y el plan anual.",
+        puntos: ["Cifras de producción tomadas del reporte HIS de promoción de la salud.", "Actualización mensual con la plantilla de la Unidad."]
+      },
+      responsable: {
+        titulo: "Responsable de la unidad",
+        nombre: "Obsta. Marleny Ponce Delgado",
+        cargo: "Unidad de Promoción de la Salud",
+        correo: ""
+      }
     }
   ],
 

@@ -3,21 +3,128 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Promoción de la Salud (PROMSA) · SIVISA</title>
-<link rel="icon" href="../assets/logos/red_salud.png">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<title>Promoción de la Salud · SIVISA · RIS Chachapoyas</title>
+<meta name="description" content="Portal de Promoción de la Salud (PROMSA) de la Red Integrada de Salud Chachapoyas: avance de metas, actividades, escenarios saludables y plan anual.">
+<link rel="icon" href="../assets/logos/promsa.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../epidemiologia/assets/styles.css">
 <link rel="stylesheet" href="../assets/sivisa.css">
+<link rel="stylesheet" href="../epidemiologia/assets/portal.css">
+<link rel="stylesheet" href="assets/promsa.css">
 </head>
-<body>
-<header class="top"><div class="top-in">
-  <a class="top-logos" href="../index.html"><img class="top-logo" src="../assets/logos/red_salud.png" alt="Red Integrada de Salud Chachapoyas"><img class="top-logo" src="../assets/logos/diresa.png" alt="DIRESA Amazonas"></a>
-  <nav class="top-nav"><a href="../index.html">← Volver a SIVISA</a></nav>
-</div></header>
-<main class="construccion" style="--c:#a17f1a">
-  <img src="../assets/logos/promsa.png" alt="Promoción de la Salud (PROMSA)">
-  <h1>Promoción de la Salud (PROMSA)</h1>
-  <p>Este portal está en construcción. Pronto encontrará aquí sus publicaciones, indicadores y secciones.</p>
-  <a class="card-btn" href="../index.html">Volver al inicio</a>
-</main>
+<body class="portal-pr">
+<header class="top">
+  <div class="top-in">
+    <a class="top-logos" href="../index.html" id="logos-cabecera" aria-label="Ir a SIVISA"></a>
+    <nav class="top-nav" id="nav-portales" aria-label="Portales"></nav>
+  </div>
+</header>
+
+<section class="phero">
+  <div class="phero-in">
+    <div class="phero-logo"><img src="../assets/logos/promsa.png" alt="Logo de Promoción de la Salud"></div>
+    <div class="phero-txt">
+      <a class="phero-volver" href="../index.html">← SIVISA</a>
+      <p class="phero-kicker">Red Integrada de Salud Chachapoyas</p>
+      <h1>Portal de Promoción de la Salud</h1>
+      <p class="phero-sub">Unidad de Promoción de la Salud · Familias, escuelas, municipios y comunidades saludables</p>
+    </div>
+  </div>
+  <div class="hero-datos"><div class="hero-datos-in" id="phero-datos"></div></div>
+</section>
+
+<div class="pl">
+  <nav class="pl-menu" aria-label="Secciones del portal">
+    <span class="pl-menu-t">Secciones</span>
+    <div id="menu"></div>
+  </nav>
+
+  <main class="pl-main">
+    <header class="pl-head">
+      <span class="pl-head-ico" id="sec-ico" aria-hidden="true"></span>
+      <div><p class="pl-miga" id="sec-miga" hidden></p><h2 id="sec-titulo"></h2><p id="sec-desc"></p></div>
+    </header>
+    <nav class="subchips" id="subsecciones" aria-label="Subsecciones" hidden></nav>
+
+    <div id="vista-inicio" hidden>
+      <div class="camp-wrap camp-epi" id="campanas"></div>
+      <div class="tiles" id="tiles"></div>
+      <div id="pr-resumen"></div>
+      <div id="tabla-inicio" hidden></div>
+      <div class="info info-main" id="info"></div>
+    </div>
+
+    <div id="vista-documentos" hidden>
+      <div id="doc-destacado"></div>
+      <div id="enfermedades" hidden></div>
+      <div class="filters-panel">
+        <div><label for="buscar">Buscar publicaciones</label>
+          <input id="buscar" type="search" placeholder="Título, vigilancia o descripción..."></div>
+        <div><label for="vigilancia">Vigilancia</label><select id="vigilancia"></select></div>
+        <div><label for="anio">Año</label><select id="anio"></select></div>
+      </div>
+      <div class="barra-lista">
+        <p class="count" id="conteo"></p>
+        <div class="vista-sel" role="group" aria-label="Forma de ver">
+          <button type="button" data-vista="tarjetas">Tarjetas</button>
+          <button type="button" data-vista="lista">Lista</button>
+        </div>
+      </div>
+      <div id="tabla"></div>
+    </div>
+
+    <div id="vista-pagina" hidden></div>
+
+    <div id="vista-calendario" hidden></div>
+
+    <div id="vista-mapa" hidden></div>
+
+    <div id="vista-semanas" hidden></div>
+
+    <div id="vista-territorio" hidden></div>
+
+    <div id="vista-brotes" hidden></div>
+
+    <div id="vista-algoritmos" hidden></div>
+
+    <div id="vista-mapaepi" hidden></div>
+
+    <div id="vista-avance" hidden></div>
+
+    <div id="vista-actividades" hidden></div>
+
+    <div id="vista-escenarios" hidden></div>
+
+    <div id="vista-plan" hidden></div>
+
+    <div id="vista-dashboard" hidden>
+    </div>
+  </main>
+</div>
+
+<footer class="pie">
+  <p>© <span id="anio-pie"></span> Promoción de la Salud · Red Integrada de Salud Chachapoyas · SIVISA</p>
+</footer>
+
+<script src="../data/sitio.js"></script>
+<script>window.PORTAL_ID = "promsa";</script>
+<script src="data/secciones.js"></script>
+<script src="data/catalogo.js"></script>
+<script src="data/nosotros.js"></script>
+<script src="data/promsa.js"></script>
+<script src="assets/promsa.js"></script>
+<script src="assets/guia.js"></script>
+<script src="../data/campanas.js"></script>
+<script src="../data/alertas.js"></script>
+<script src="../data/situacion.js"></script>
+<script src="../assets/campanas.js"></script>
+<script src="../assets/publicaciones.js"></script>
+<script src="../assets/info.js"></script>
+<script src="../epidemiologia/assets/portal.js"></script>
+<script>(function(){var P=((window.SITIO||{}).portales||[]).filter(function(p){return p.id==="promsa";})[0]||{};Info.montar(document.getElementById("info"),P.sobre,P.responsable);})();
+Campanas.montar(document.getElementById("campanas"), { portal: "promsa", base: "../" });
+Promsa.portada();</script>
 </body>
 </html>

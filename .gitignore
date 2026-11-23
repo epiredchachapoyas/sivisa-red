@@ -28,3 +28,7 @@ epidemiologia/data/unidades/*.geojson
 !salud-ambiental/datos/agua/*/*.xlsx
 !salud-ambiental/datos/vectores/*/*.xlsx
 !salud-ambiental/datos/vectores/*/*/*.xlsx
+
+# Excepción: PROMSA (plantilla mensual y reporte HIS de promoción, ambos agregados por microred) sí se suben
+!promsa/datos/*.xlsx
+!promsa/datos/his/*.xlsx

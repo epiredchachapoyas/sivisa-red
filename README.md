@@ -11,7 +11,7 @@ Portal informativo del Sistema de Información de Vigilancia Sanitaria.
 | `assets/logos/` | Logos. Para cambiar uno, reemplace el archivo con el mismo nombre |
 | `epidemiologia/` | Portal Epidemiológico (documentos y dashboard) |
 | `salud-ambiental/` | Portal de Salud Ambiental: Nosotros, Calidad del agua y Control vectorial |
-| `promsa/` | Promoción de la Salud (en construcción) |
+| `promsa/` | Promoción de la Salud: Nosotros, Avance de metas, Actividades, Escenarios saludables y Plan anual |
 
 **Agregar un portal:** copie un bloque `{ ... }` dentro de `portales` en `data/sitio.js`, cambie sus datos y cree su carpeta.
 
@@ -43,6 +43,17 @@ las unidades de notificación y la barra "Situación actual" (`data/situacion.js
 notificación semanal, agua, Aedes y las alertas o comunicados subidos en los últimos 15 días).
 Estos Excel solo contienen datos agregados por sistema o establecimiento (sin datos personales).
 
+## PROMSA: actualización mensual
+
+| Qué | Archivo | Carpeta |
+|---|---|---|
+| Plantilla de la Unidad (Nosotros, Metas, Actividades, Escenarios, Cronograma) | `PROMSA_portal.xlsx` (reemplazar con el mismo nombre) | `promsa/datos/` |
+| Reporte HIS de promoción de la salud, tal como se descarga | cualquier nombre `.xlsx` (se usa el de fecha de corte más reciente) | `promsa/datos/his/` |
+| Fotos de actividades (opcional) | el nombre escrito en la columna Foto | `promsa/fotos/` |
+
+La publicación automática ejecuta `promsa/herramientas/preparar_promsa.py`, que genera `promsa/data/promsa.js` y `promsa/data/nosotros.js`.
+Del HIS solo se leen totales por microred. Nunca subir bases nominales (con DNI o nombres), como el reporte de visitas domiciliarias por DNI.
+
 ## Alertas nacionales y regionales (barra de inicio)
 
 Edite `data/alertas.js`: cada bloque es una alerta (`ambito`: Nacional, Regional o Red; `desde` / `hasta`; `enlace` al PDF o a la página oficial).
@@ -50,9 +61,7 @@ Aparecen primero en la barra de los portales y se ocultan solas al pasar la fech
 
 ## Guías animados
 
-
-
-
 - Portal Epidemiológico: búho (`epidemiologia/assets/buho.js`), con un gesto y mensaje por pestaña.
 - Portal de Salud Ambiental: mundo, gota, Aedes hembra y Lutzomyia (`salud-ambiental/assets/guia.js`).
+- Portal PROMSA: Casita saludable (`promsa/assets/guia.js`).
 Los mensajes de cada pestaña se cambian en la lista del inicio de cada archivo. El visitante puede ocultarlos con la ×.

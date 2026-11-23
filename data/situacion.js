@@ -1,6 +1,6 @@
 /* Generado por herramientas/situacion.py en cada publicación. No editar a mano: las campañas fijas están en data/campanas.js. */
 window.SITUACION = {
- "generado": "2026-11-05",
+ "generado": "2026-11-22",
  "diapositivas": [
   {
    "tipo": "brotes",
