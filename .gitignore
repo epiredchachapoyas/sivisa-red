@@ -37,3 +37,7 @@ epidemiologia/data/unidades/*.geojson
 !data/SIVISA_INSTITUCIONAL.xlsx
 !epidemiologia/datos/ACTIVIDADES_EPIDEMIOLOGIA.xlsx
 !salud-ambiental/datos/ACTIVIDADES_SALUD_AMBIENTAL.xlsx
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
