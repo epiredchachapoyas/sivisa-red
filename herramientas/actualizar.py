@@ -46,6 +46,26 @@ def git(*args, ok=(0,)):
     return r.stdout
 
 
+def traer_cambios():
+    """git pull. Si un mismo archivo cambió aquí y en otra computadora (p. ej. un Excel), se conserva el de ESTA
+    computadora y el aviso queda en el registro; nunca deja el repositorio a medio combinar."""
+    for a in (("rebase", "--abort"), ("merge", "--abort")):          # restos de un intento anterior
+        git(*a, ok=(0, 1, 128))
+    try:
+        git("pull", "--rebase", "--autostash", "--quiet")
+        return
+    except Exception:
+        git("rebase", "--abort", ok=(0, 1, 128))
+    try:
+        git("add", "-A")
+        git("commit", "-m", "Cambios locales antes de combinar", ok=(0, 1))
+        git("pull", "--no-rebase", "--no-edit", "-X", "ours", "--quiet")
+        log("Aviso: un archivo cambió aquí y en otra computadora; se conservó la versión de esta computadora.")
+    except Exception as e:
+        git("merge", "--abort", ok=(0, 1, 128))
+        log("Aviso: no se pudo traer cambios de GitHub (%s). Se reintenta en la próxima vuelta." % str(e)[:200])
+
+
 def huella():
     """Nombre, tamaño y fecha de cada archivo de la carpeta del año más reciente y de Maestros."""
     if not os.path.isdir(BASES):
@@ -87,10 +107,7 @@ def main():
         guardar(est)
         return
     # 1) Cambios de otras computadoras
-    try:
-        git("pull", "--rebase", "--autostash", "--quiet")
-    except Exception as e:
-        log("Aviso: no se pudo traer cambios de GitHub (%s). Se reintenta en la próxima vuelta." % str(e)[:200])
+    traer_cambios()
     # 2) Bases semanales
     hu = None if os.path.isfile(SOLO_PUBLICAR) else huella()
     if hu and (forzar or hu != est.get("huella")):
@@ -114,6 +131,9 @@ def main():
             log("Publicado en GitHub: %d archivo(s). El sitio se actualiza en 2-3 minutos." % len(cambios))
             for c in cambios[:15]:
                 log("   · " + c.strip('"'))
+        elif git("rev-list", "--count", "@{u}..HEAD", ok=(0, 128)).strip() not in ("", "0"):
+            git("push", "--quiet")                       # commits que quedaron sin subir (p. ej. tras combinar)
+            log("Publicado en GitHub: cambios pendientes de esta computadora.")
         elif not lineas:
             log("Sin cambios.")
     except Exception as e:
