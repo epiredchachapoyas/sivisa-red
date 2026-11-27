@@ -41,3 +41,6 @@ epidemiologia/data/unidades/*.geojson
 # Archivos temporales de Python
 __pycache__/
 *.pyc
+
+# Archivos temporales de Office (Excel abierto)
+~$*
